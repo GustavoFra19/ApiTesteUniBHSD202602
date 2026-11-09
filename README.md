@@ -15,21 +15,25 @@ Esta é uma API educacional desenvolvida em Python com o framework **FastAPI** e
 ## ⚙️ Como configurar e executar (usando `uv`)
 
 1. Clone este repositório para o seu ambiente local (ou abra no GitHub Codespaces).
-2. No terminal, dentro da pasta do projeto, inicialize o ambiente com o **uv** (isso criará o `pyproject.toml` e preparará o ambiente virtual isolado):
+2. No terminal, dentro da pasta do projeto, instale o **uv**
+```bash
+pip install uv
+```
+3. No terminal, dentro da pasta do projeto, inicialize o ambiente com o **uv** (isso criará o `pyproject.toml` e preparará o ambiente virtual isolado):
    ```bash
    uv init
    ```
-3. Adicione as dependências do projeto. O **uv** fará o download e a instalação em frações de segundo:
+4. Adicione as dependências do projeto. O **uv** fará o download e a instalação em frações de segundo:
    ```bash
    uv add fastapi uvicorn
    ```
-4. Inicie o servidor local da API utilizando o comando `run` do **uv**:
+5. Inicie o servidor local da API utilizando o comando `run` do **uv**:
    ```bash
    uv run uvicorn main:app --reload
    ```
    *(Na primeira execução, o banco de dados será criado automaticamente na mesma pasta).*
 
-5. O servidor estará rodando em: `http://127.0.0.1:8000`
+6. O servidor estará rodando em: `http://127.0.0.1:8000`
 
 ## 📖 Documentação e Testes (Swagger UI)
 
