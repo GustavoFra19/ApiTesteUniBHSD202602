@@ -1,72 +1,78 @@
-# Projeto A3: API de Gerenciamento
+# Template de API RESTful (FastAPI + SQLite) - Monolito (Projeto A3)
 
-Esta é a API de backend desenvolvida para o Projeto A3, integrando os conceitos de Sistemas Distribuídos e Usabilidade. A aplicação fornece os endpoints necessários para gerenciar registros e servirá como base de dados para o consumo das interfaces de usuário (front-end).
+> 💡 **AVISO IMPORTANTE:** Este repositório contém a estrutura base desenvolvida para o **Projeto A3** em formato **monolítico**. Todo o ciclo de vida da aplicação — conexão com o banco, estruturação de dados e roteamento — está concentrado em um único arquivo (`main.py`). Ao final deste documento, há um guia prático de como evoluir esta base para o **Projeto A4**, adotando uma arquitetura em múltiplas camadas.
 
-O projeto foi construído utilizando **FastAPI** e **SQLite**, com uma arquitetura modularizada em múltiplas camadas.
+Esta é uma API educacional desenvolvida em Python com o framework **FastAPI** e banco de dados relacional **SQLite**. Ela atende aos requisitos iniciais de persistência de dados e documentação automática, servindo como backend para integração com a UC de Usabilidade.
 
-## 🛠 Tecnologias Utilizadas
+## 🛠 Tecnologias e Pré-requisitos
 
 * **Python 3.8+**
-* **FastAPI:** Micro-framework web de alta performance para a construção da API.
-* **Uvicorn:** Servidor web ASGI para execução da aplicação.
-* **Pydantic:** Validação estrita de dados e tipagem (Type Hints).
-* **SQLite:** Banco de dados relacional leve e embutido (persistência local).
+* **uv** (Gerenciador de pacotes e projetos ultrarrápido para Python)
+* **FastAPI** (Framework web de alta performance)
+* **Uvicorn** (Servidor web ASGI)
+* **SQLite** (Banco de dados relacional nativo do Python)
 
-## 📁 Arquitetura do Projeto (Múltiplas Camadas)
+## ⚙️ Como configurar e executar (usando `uv`)
 
-Para garantir a organização e escalabilidade, o código foi dividido nos seguintes arquivos:
-
-* `database.py`: Gerencia a conexão com o banco de dados SQLite e a criação da tabela.
-* `models.py`: Contém os esquemas de dados (Pydantic), separando a entrada de dados (o que o usuário envia) da resposta (o que a API devolve).
-* `main.py`: Arquivo principal que concentra as rotas (endpoints HTTP) e a inicialização da API.
-
-## ⚙️ Como Configurar e Executar (Localmente)
-
-1. Clone ou baixe este repositório para a sua máquina local.
-2. Crie e ative um ambiente virtual (recomendado):
+1. Clone este repositório para o seu ambiente local (ou abra no GitHub Codespaces).
+2. No terminal, dentro da pasta do projeto, inicialize o ambiente com o **uv** (isso criará o `pyproject.toml` e preparará o ambiente virtual isolado):
    ```bash
-   python -m venv venv
-   # No Windows: venv\Scripts\activate
-   # No Linux/Mac: source venv/bin/activate
+   uv init
    ```
-3. Instale as dependências necessárias:
+3. Adicione as dependências do projeto. O **uv** fará o download e a instalação em frações de segundo:
    ```bash
-   pip install fastapi "uvicorn[standard]"
+   uv add fastapi uvicorn
    ```
-4. Inicie o servidor ASGI:
+4. Inicie o servidor local da API utilizando o comando `run` do **uv**:
    ```bash
-   uvicorn main:app --reload
+   uv run uvicorn main:app --reload
    ```
-5. A API estará rodando no endereço: `http://127.0.0.1:8000`
+   *(Na primeira execução, o banco de dados será criado automaticamente na mesma pasta).*
 
-## ☁️ Como Executar no GitHub Codespaces
+5. O servidor estará rodando em: `http://127.0.0.1:8000`
 
-1. Na página inicial deste repositório no GitHub, clique no botão verde **Code**.
-2. Selecione a aba **Codespaces** e clique em **Create codespace on main**.
-3. No terminal integrado do VS Code web, instale as dependências:
-   ```bash
-   pip install fastapi "uvicorn[standard]"
-   ```
-4. Inicie o servidor:
-   ```bash
-   uvicorn main:app --reload
-   ```
-5. O GitHub exibirá um pop-up. Clique em **Open in Browser** para acessar a aplicação através de uma URL segura gerada dinamicamente.
+## 📖 Documentação e Testes (Swagger UI)
 
-## 📖 Documentação Automática (Swagger UI)
+A API possui documentação interativa gerada automaticamente. Você não precisa de ferramentas externas como Postman ou Insomnia para testar as rotas.
 
-A API possui documentação nativa e interativa. Com o servidor em execução, acesse o endpoint abaixo no seu navegador:
+Com o servidor em execução, acesse no navegador:
+👉 **[http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)**
 
-👉 **`/docs`** (Ex: `http://127.0.0.1:8000/docs`)
+## 🚀 Resumo dos Endpoints Disponíveis
 
-Nesta interface, você poderá visualizar o contrato de todos os endpoints e realizar testes práticos utilizando o botão **"Try it out"**.
+A API implementa o CRUD completo. Todos os endpoints estão definidos no arquivo `main.py`:
 
-## 🚀 Endpoints Disponíveis
+* **POST `/registros`**: Cria um novo registro no banco (Status `201 Created` ou `400 Bad Request`).
+* **GET `/registros`**: Retorna a lista com todos os registros salvos (Status `200 OK`).
+* **GET `/registros/{id}`**: Busca os detalhes de um registro específico (Status `200 OK` ou `404 Not Found`).
+* **PUT `/registros/{id}`**: Atualiza os dados de um registro existente (Status `200 OK` ou `404 Not Found`).
+* **DELETE `/registros/{id}`**: Exclui um registro do banco de dados (Status `200 OK` ou `404 Not Found`).
 
-A API implementa o CRUD completo operando com os status HTTP padronizados (200, 201, 400, 404, 500):
+---
 
-* `POST /registros`: Cria um novo registro no banco de dados.
-* `GET /registros`: Retorna a lista de todos os registros.
-* `GET /registros/{id}`: Busca os detalhes de um registro específico pelo ID.
-* `PUT /registros/{id}`: Atualiza os dados de um registro existente.
-* `DELETE /registros/{id}`: Exclui um registro do sistema.
+## 🏗️ Guia de Evolução: Do Monolito (A3) para Múltiplas Camadas (A4)
+
+Manter todo o código em um único arquivo (`main.py`) é excelente para o aprendizado inicial e testes rápidos, mas torna a manutenção difícil conforme o sistema cresce. 
+
+Para o **Projeto A4**, o grupo deverá refatorar este monolito em uma **arquitetura de múltiplas camadas**. Siga estes passos para organizar a casa:
+
+1. **Isole o Banco de Dados (`database.py`)**
+   * Crie um novo arquivo chamado `database.py`.
+   * Mova para ele toda a lógica de conexão com o SQLite (a criação da `engine`, do `cursor` ou a configuração do ORM que estiverem usando) e a função que cria as tabelas iniciais.
+   * *Analogia:* Este será o almoxarifado exclusivo do seu sistema.
+
+2. **Separe os Contratos de Dados (`models.py`)**
+   * Crie um arquivo `models.py`.
+   * Recorte do seu `main.py` todas as classes que herdam de `BaseModel` do Pydantic (como `RegistroCreate`, `RegistroResponse`, etc.) e cole neste novo arquivo.
+   * *Analogia:* Este arquivo será o setor de controle de qualidade, ditando o que pode entrar ou sair do sistema.
+
+3. **Limpe as Rotas (`main.py`)**
+   * O seu `main.py` agora deve ficar muito mais limpo.
+   * Mantenha apenas a inicialização do FastAPI (`app = FastAPI()`) e as funções de rota (os `@app.get`, `@app.post`, etc.).
+   * No topo do `main.py`, importe os módulos que você acabou de criar:
+     ```python
+     from database import conectar_banco, criar_tabelas
+     from models import RegistroCreate, RegistroResponse
+     ```
+
+Após essa divisão, seu código estará preparado para escalar, integrando facilmente novas funcionalidades de segurança, como um proxy reverso Nginx, de forma totalmente estruturada e profissional.
